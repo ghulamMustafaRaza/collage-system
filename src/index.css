@@ -1,20 +1,28 @@
 body{
-    background-color: #eee;
+    padding-top: 80px;
 }
-.todoTask{
-    list-style-type: none;
-    padding:0;
-    margin:0;
+.fullHeight{
+    min-height: calc(100vh - 70px)
 }
-.todoTask>li{
-    margin:10px;
-    display: flex;
+#loginform{
+    display:flex;
+    width: 250px;
+    flex-direction: column;
     align-items: center;
+    padding: 25px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px #ccc, -2px -2px 5px #ccc;
+    margin: 0 auto;
 }
-.todoTask>li>.col-xs-6{
-    display: flex;
+#singupform{
+    display:flex;
+    width: 250px;
+    flex-direction: column;
     align-items: center;
-}
-.todoTask>li>.col-xs-6>*{
-    margin:5px;
+    padding: 25px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px #ccc, -2px -2px 5px #ccc;
+    margin: 0 auto;
 }
