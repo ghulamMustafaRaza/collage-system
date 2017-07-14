@@ -1,6 +1,6 @@
 import React from 'react'
 import * as firebase from "firebase"
-
+import Loading from "./Loading"
 // firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
 //   // Handle Errors here.
 //   var errorCode = error.code;
@@ -12,10 +12,12 @@ class Signup extends React.Component{
   constructor(props){
     super(props)
     this.state={
+      user:null,
       email: '',
       password:'',
       name:'',
-      type:'student'
+      type:'student',
+      load: false
     }
     this.handleInput=this.handleInput.bind(this)
   }
@@ -47,13 +49,19 @@ class Signup extends React.Component{
     .then((data)=>{
       console.log('data',data)
       firebase.auth().currentUser.updateProfile({
-        displayName: this.state.name,
-        
+        displayName: this.state.name
       })
-      alert(this.state.name);
       var uid = firebase.auth().currentUser.uid;
-      console.log(uid)
-
+      firebase.database().ref('user/'+uid).set({
+        email: this.state.email,
+        password: this.state.password,
+        name: this.state.name,
+        type: this.state.type
+      })
+      this.state.type === "student"?
+        this.props.history.push("/user/student/mycv")
+      :
+        this.props.history.push("/user/company/postAJob")
     })
   }
   handleRadio(ev){
@@ -61,42 +69,67 @@ class Signup extends React.Component{
       type: ev.target.value
     })
   }
+  componentWillMount(){
+    firebase.auth().onAuthStateChanged(user=>this.setState({user,load:true}))
+  }
   render(){
     return(
       <div>
-          <form className="form" id="loginform" onSubmit={ev=>ev.preventDefault()}>
-          <div className="form-group">
-            <label className="" htmlFor="email">Name:</label>
-            <div className="">
-              <input type="text" className="form-control" id="name" onChange={this.handleInput} placeholder="Enter email" name="email"/>
+        {!this.state.load?<Loading/>
+        :
+        <div>
+          {!this.state.user?<form className="form" id="loginform" onSubmit={ev=>ev.preventDefault()}>
+            <div className="form-group">
+              <label className="" htmlFor="email">Name:</label>
+              <div className="">
+                <input type="text" className="form-control" id="name" onChange={this.handleInput} placeholder="Enter email" name="email"/>
+              </div>
             </div>
+            <div className="form-group">
+              <label className="" htmlFor="email">Email:</label>
+              <div className="">
+                <input type="email" className="form-control" id="email" onChange={this.handleInput} placeholder="Enter email" name="email"/>
+              </div>
+            </div>
+            <div className="form-group">
+              <label className="" htmlFor="pwd">Password:</label>
+              <div className="">          
+                <input type="password" className="form-control" id="pwd" onChange={this.handleInput} placeholder="Enter password" name="pwd"/>
+              </div>
+            </div>
+            <div className="form-group radio" style={{}}>        
+              <div className="radio" value={this.state.type}>
+                <input type="radio" name="type" className="" value="student" onClick={this.handleRadio.bind(this)} id="student"/><label htmlFor="student">student</label>
+              </div>
+              <div className="radio" value={this.state.type}>
+                <input type="radio" name="type" className="" value="company" onClick={this.handleRadio.bind(this)} id="company"/><label htmlFor="company">company</label>              
+              </div>
+            </div>
+            <div className="form-group">        
+              <div className="">
+                <button type="submit" onClick={this.handleSubmit.bind(this)} className="btn btn-default">Submit</button>
+              </div>
+            </div>
+          </form>
+          :
+          <div>
+            <h1 className="text-center">logged in with {this.state.user.email}</h1>
+            <div className="btn btn-danger" onClick={()=>{
+              firebase.auth().signOut().then((data)=>{
+                console.log(data)
+              })
+            }}>logout</div>
+            <div className="btn btn-primary" onClick={()=>{
+              this.props.history.push('/user')  
+            }}>Go To User Panel</div>
+            <div className="btn btn-primary" onClick={()=>{
+              this.props.history.push('/user/student/mycv')  
+            }}>updat cv</div>
+            
           </div>
-          <div className="form-group">
-            <label className="" htmlFor="email">Email:</label>
-            <div className="">
-              <input type="email" className="form-control" id="email" onChange={this.handleInput} placeholder="Enter email" name="email"/>
-            </div>
-          </div>
-          <div className="form-group">
-            <label className="" htmlFor="pwd">Password:</label>
-            <div className="">          
-              <input type="password" className="form-control" id="pwd" onChange={this.handleInput} placeholder="Enter password" name="pwd"/>
-            </div>
-          </div>
-          <div className="form-group radio" style={{}}>        
-            <div className="radio" value={this.state.type}>
-              <input type="radio" name="type" className="" value="student" onClick={this.handleRadio.bind(this)} id="student"/><label htmlFor="student">student</label>
-            </div>
-            <div className="radio" value={this.state.type}>
-              <input type="radio" selected name="type" className="" value="company" onClick={this.handleRadio.bind(this)} id="company"/><label htmlFor="company">company</label>              
-            </div>
-          </div>
-          <div className="form-group">        
-            <div className="">
-              <button type="submit" onClick={this.handleSubmit.bind(this)} className="btn btn-default">Submit</button>
-            </div>
-          </div>
-        </form>
+          }
+        </div>
+        }
       </div>
     )
   }

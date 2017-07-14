@@ -1,4 +1,5 @@
 import React from 'react'
+import Loading from './Loading'
 import * as firebase from "firebase"
 import {BrowserRouter as Router} from "react-router-dom"
 // firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
@@ -12,8 +13,10 @@ class Signin extends React.Component{
   constructor(props){
     super(props)
     this.state={
+      user:null,
       email: '',
-      password:''
+      password:'',
+      load:false
     }
     this.handleInput=this.handleInput.bind(this)
   }
@@ -29,7 +32,9 @@ class Signin extends React.Component{
       })
     }
   }
-  
+  componentWillMount(){
+    firebase.auth().onAuthStateChanged(user=>this.setState({user, load:true}))
+  }
   handleSubmit(){
     firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).then(data=>{
       console.log(data)
@@ -45,34 +50,41 @@ class Signin extends React.Component{
   render(){
     return(
       <div>
-       { !this.props.user.email?
-          <form className="form" id="loginform" onSubmit={ev=>ev.preventDefault()}>
-          <div className="form-group">
-            <label className="control-label" htmlFor="email">Email:</label>
-            <div>
-              <input type="email" className="form-control" id="email" onChange={this.handleInput} placeholder="Enter email" name="email"/>
-            </div>
-          </div>
-          <div className="form-group">
-            <label className="control-label" htmlFor="pwd">Password:</label>
-            <div className="">          
-              <input type="password" className="form-control" id="pwd" onChange={this.handleInput} placeholder="Enter password" name="pwd"/>
-            </div>
-          </div>
-          <div className="form-group">        
-            <div>
-              <button type="submit" onClick={this.handleSubmit.bind(this)} className="btn btn-default">Login</button>
-            </div>
-          </div>
-        </form>
+        {!this.state.load?<Loading/>
         :
         <div>
-          <h1 className="text-center">logged in with {this.props.user.email}</h1>
-          <div className="btn" onClick={()=>{
-            firebase.auth().signOut().then((data)=>{
-              console.log(data)
-            })
-          }}>logout</div>
+          {!this.state.user?
+            <form className="form" id="loginform" onSubmit={ev=>ev.preventDefault()}>
+            <div className="form-group">
+              <label className="control-label" htmlFor="email">Email:</label>
+              <div>
+                <input type="email" className="form-control" id="email" onChange={this.handleInput} placeholder="Enter email" name="email"/>
+              </div>
+            </div>
+            <div className="form-group">
+              <label className="control-label" htmlFor="pwd">Password:</label>
+              <div className="">          
+                <input type="password" className="form-control" id="pwd" onChange={this.handleInput} placeholder="Enter password" name="pwd"/>
+              </div>
+            </div>
+            <div className="form-group">        
+              <div>
+                  <button type="submit" onClick={this.handleSubmit.bind(this)} className="btn btn-default">Login</button>
+              </div>
+            </div>
+          </form>
+          :
+          <div>
+            <h1 className="text-center">logged in with {this.state.user.email}</h1>
+            <div className="btn btn-danger" onClick={()=>{
+              firebase.auth().signOut().then((data)=>{
+                console.log(data)
+              })
+            }}>logout</div><div className="btn btn-primary" onClick={()=>{
+              this.props.history.push('/user')  
+            }}>Go To User Panel</div>
+          </div>
+          }
         </div>
         }
       </div>
