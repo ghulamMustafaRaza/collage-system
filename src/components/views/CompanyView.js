@@ -21,7 +21,6 @@ export default class CompanyView extends React.Component{
                         </tr>
                     </tbody>
                 </table>
-                {/*{this.props.onDelete && <div className="btn btn-denger pull-right" onClick={()=>{this.props.onDelete()}} > delete </div>}*/}
             </div>
         )
     }

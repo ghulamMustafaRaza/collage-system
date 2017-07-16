@@ -12,22 +12,12 @@ export default class AdminAllJobs extends React.Component{
             JobsKeys : [],
             loading:true
         }
-        this.onDelete = this.onDelete.bind(this)
         this.updateState = this.updateState.bind(this);
+        this.onDelete = this.onDelete.bind(this);
     }
     onDelete(ind){
-        // let obj = {...this.state.csvObj};
-        // var keyForFind = this.state.JobsKeys[ind];
-        // var findedObjKey; 
-        // var obj = this.state.snapObj;
-        // for(let a in obj){
-        //     let childObj = obj[a];
-        //     if(keyForFind in childObj){
-        //         findedObjKey = a;
-        //     }
-        // }
-        // console.log({keyForFind,findedObjKey})
-        firebase.database().ref('Jobs').child(firebase.auth().currentUser.uid).child(this.state.JobsKeys[ind]).remove(function (error) {
+        var keyForFind = this.state.JobsKeys[ind];
+        firebase.database().ref('Jobs').child(keyForFind).remove(function (error) {
             if (!error) {
                 console.log("remove from firebase")
             }
@@ -38,16 +28,16 @@ export default class AdminAllJobs extends React.Component{
         this.updateState()        
     }
     componentDidMount(){
-        this.updateState()        
+        this.updateState()
     }
     updateState(){
-        firebase.database().ref('Jobs/'+ firebase.auth().currentUser.uid).once('value').then((snap)=>{
+        firebase.database().ref('Jobs').orderByChild("companyUid").equalTo(firebase.auth().currentUser.uid).once('value').then((snap)=>{
             var snapObj = snap.val();
             var snapVals = [];
             var snapKeys = [];
-            for(let key in snapObj){
-                snapKeys.push(key)
-                snapVals.push(snapObj[key])
+            for(let o in snapObj){
+                snapVals.push((snapObj[o]))
+                snapKeys.push(o)
             }
             this.setState({
                 Jobs : snapVals,
@@ -55,9 +45,7 @@ export default class AdminAllJobs extends React.Component{
                 JobsObj: snapObj,
                 loading: false
             })
-            console.log(this.state.cvs)
         }).catch(err=>{console.log(err)})
-
     }
     render(){
         return(

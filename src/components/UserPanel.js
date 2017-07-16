@@ -21,27 +21,26 @@ export default class UserPanel extends C{
             user:null,
             dataBase: null,
             load: false,
-            connct: true
         }
     }
     componentDidMount(){
         firebase.auth().onAuthStateChanged(()=>{
-            var uid = firebase.auth().currentUser.uid;
-            var dataBase;
-            var admin = true
-            firebase.database().ref('user/'+uid).once('value',(snapshot)=>{
-                let localD = snapshot.val();
-                console.log(localD)
-                this.setState({dataBase:localD,load: true});
-
-            }).catch((err)=>{
-                console.log(err)
-                this.setState({connct: false,load: true});
-            })
-            console.log("dtatabasa:"+dataBase)
-            this.setState({
-                user: firebase.auth().currentUser
-            })
+            var user = firebase.auth().currentUser;
+            if(user){
+                var uid = firebase.auth().currentUser.uid;
+                firebase.database().ref('user/'+uid).once('value',(snapshot)=>{
+                    let localD = snapshot.val();
+                    this.setState({dataBase:localD,load: true});
+                }).catch((err)=>{
+                    console.log(err)
+                })
+                this.setState({
+                    user: firebase.auth().currentUser
+                })
+            }
+            else{
+                this.props.history.push('/signin')
+            }
         })
     }
     
@@ -50,14 +49,13 @@ export default class UserPanel extends C{
             <div className="">
                 {!this.state.load?
                     <Loading/>
-                :!this.state.connct?<h1 className="text-center">net problem</h1>
                 :
                 <Router>
                     <div className="container">
                         <div className="container userpanel">
                             <div className="row">
                                 <div className="col-xs-4">
-                                    <img src={(this.state.user&&this.state.user.photoURL||userImg)} alt="" style={{width:200,maxWidth:"100%"}}  />
+                                    <img src={((this.state.user&&this.state.user.photoURL)||userImg)} alt="" style={{width:200,maxWidth:"100%"}}  />
                                 </div>
                                 <div style={{fontSize:"120%"}} className="col-xs-8" >
                                     <table className="table">

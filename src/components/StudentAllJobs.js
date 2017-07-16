@@ -7,50 +7,41 @@ export default class StudentAllJobs extends React.Component{
     constructor(props){
         super(props)
         this.state= {
-            snapObj :{},
             Jobs : [],
             JobsObj:{},
             JobsKeys : [],
-            pureKeys: [],
-            pureVals: [],
             loading:true
         }
+    }
+    onApply(ind){
+        let currentUser = firebase.auth().currentUser;
+        let key = this.state.JobsKeys[ind];
+        firebase.database().ref('CV/'+currentUser.uid).once('value').then(snap=>{
+            var userCV = snap.val();
+            if(!userCV) {
+                userCV = {
+                    name: currentUser.displayName,
+                    email: currentUser.email
+                }
+            }
+            firebase.database().ref('Jobs/'+key).child('apply').child(currentUser.uid).set(userCV)
+        })
     }
     componentDidMount(){
         firebase.database().ref('Jobs').once('value').then((snap)=>{
             var snapObj = snap.val();
-            var unCVals = [];
-            var unCKeys = [];
-            for(let o in snapObj){
-                unCKeys.push(o)
-                unCVals.push(snapObj[0])
-            }
             var snapVals = [];
             var snapKeys = [];
-            for(let obj in snapObj){
-                let value =[];
-                let key =[];
-                for(let a in snapObj[obj]){
-                    // console.log(a)
-                    key.push(a)
-                    value.push(snapObj[obj][a])
-                }
-                snapVals = [...snapVals , ...value]
-                snapKeys = [...snapKeys , ...key]
+            for(let o in snapObj){
+                snapVals.push((snapObj[o]))
+                snapKeys.push(o)
             }
             this.setState({
                 Jobs : snapVals,
                 JobsKeys : snapKeys,
                 JobsObj: snapObj,
-                pureKeys: unCKeys,
-                pureVals: unCVals,
-                loading: false,
-                snapObj
+                loading: false
             })
-            // console.log(this.props.cvs)
-            console.log(this.state.cvs)
-
-            // alert('run')
         }).catch(err=>{console.log(err)})
     }
     render(){
@@ -68,7 +59,7 @@ export default class StudentAllJobs extends React.Component{
                     <div>
                             {this.state.Jobs.map((Job,key)=>(
                                 <div key={key}>
-                                    <JobsView Job={Job}/>
+                                    <JobsView ind={key} onApply={this.onApply.bind(this, key)} Job={Job}/>
                                 </div>
                             ))}
                     </div>

@@ -2,12 +2,6 @@ import React from 'react'
 import * as firebase from "firebase"
 import Loading from "./Loading"
 import {Link} from "react-router-dom"
-// firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
-//   // Handle Errors here.
-//   var errorCode = error.code;
-//   var errorMessage = error.message;
-//   // ...
-// });
 
 class Signup extends React.Component{
   constructor(props){
@@ -40,15 +34,11 @@ class Signup extends React.Component{
     }
   }
   handleSubmit(){
-    firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).catch(function(error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      alert(errorMessage)
-      // ...
+    firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
+    .catch(function(error) {
+      alert(error.message)
     })
     .then((data)=>{
-      console.log('data',data)
       firebase.auth().currentUser.updateProfile({
         displayName: this.state.name
       })
@@ -71,15 +61,19 @@ class Signup extends React.Component{
     })
   }
   componentWillMount(){
-    firebase.auth().onAuthStateChanged(user=>this.setState({user,load:true}))
+    firebase.auth().onAuthStateChanged(()=>{
+      if(firebase.auth().currentUser){
+        this.props.history.push('/user')
+      }else{
+        this.setState({load: true})
+      }
+    })
   }
   render(){
     return(
       <div>
         {!this.state.load?<Loading/>
-        :
-        <div>
-          {!this.state.user?<form className="form" id="loginform" onSubmit={ev=>ev.preventDefault()}>
+        :<form className="form" id="loginform" onSubmit={ev=>ev.preventDefault()}>
             <div className="form-group">
               <label className="" htmlFor="email">Name:</label>
               <div className="">
@@ -113,24 +107,6 @@ class Signup extends React.Component{
             </div>
             <Link className="pull-left" to="/signin">Already A Account</Link>
           </form>
-          :
-          <div>
-            <h1 className="text-center">logged in with {this.state.user.email}</h1>
-            <div className="btn btn-danger" onClick={()=>{
-              firebase.auth().signOut().then((data)=>{
-                console.log(data)
-              })
-            }}>logout</div>
-            <div className="btn btn-primary" onClick={()=>{
-              this.props.history.push('/user')  
-            }}>Go To User Panel</div>
-            <div className="btn btn-primary" onClick={()=>{
-              this.props.history.push('/user/student/mycv')  
-            }}>updat cv</div>
-            
-          </div>
-          }
-        </div>
         }
       </div>
     )

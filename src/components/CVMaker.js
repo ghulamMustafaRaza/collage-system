@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
 import {
-//   BrowserRouter as Router,
-//   Route,
   Link
 } from 'react-router-dom'
 
@@ -13,7 +11,6 @@ export default class CvBuilder extends Component {
         this.state = {
             currentCountExp:0,
             currentCountEdu:0,
-            // currentUserCV:firebase.database().ref('CV/',firebase.auth()
         }
         this.addExp = this.addExp.bind(this);
         this.addEdu = this.addEdu.bind(this);
@@ -29,23 +26,11 @@ export default class CvBuilder extends Component {
         var enemail = this.refs.email.value;
         var enmobile = this.refs.mobile.value;
         var enaddress = this.refs.address.value;
-
-        // var encompany = this.refs.company.value;
-        // var enpost = this.refs.post.value;
-        // var enfrom = this.refs.from.value;
-        // var ento = this.refs.to.value;
-
         var enskill = this.refs.skill.value;
 
-        // var enschooling = this.refs.schooling.value;
-        // var endegree = this.refs.degree.value;
-        // var ensince = this.refs.since.value;
-        // var entill = this.refs.till.value;
-        
         var eninterest = this.refs.interest.value;
-        console.log(enname);
         var qualifications=[];
-        for(let i = 1; i <= this.state.currentCountEdu; i++)
+        for(let i = 0; i <= this.state.currentCountEdu; i++)
         {
             qualifications.push({
                 schooling: this.refs['schooling' + i].value,
@@ -55,7 +40,7 @@ export default class CvBuilder extends Component {
             })
         }
         var experiance=[];
-        for(let i = 1; i <= this.state.currentCountExp; i++)
+        for(let i = 0; i <= this.state.currentCountExp; i++)
         {
             experiance.push({
                 company: this.refs['company' + i].value,
@@ -64,7 +49,7 @@ export default class CvBuilder extends Component {
                 to: this.refs['to' + i].value
             })
         }
-        firebase.database().ref("CV"+"/"+firebase.auth().currentUser.uid).set({
+        firebase.database().ref("CV/"+firebase.auth().currentUser.uid).set({
             persnolInfo:{
                 name: enname,
                 email: enemail,
@@ -77,7 +62,6 @@ export default class CvBuilder extends Component {
             interest: eninterest
 
            })
-            // this.props.history.push("/Student")
     }
 
     counter() {
@@ -85,7 +69,6 @@ export default class CvBuilder extends Component {
         this.setState({
             currentCountExp : currentCountExp + 1
         })
-        // console.log(currentCountExp)
         return(currentCountExp)
     }
 
@@ -94,7 +77,6 @@ export default class CvBuilder extends Component {
         this.setState({
             currentCountEdu : currentCountEdu + 1
         })
-        // console.log(currentCountEdu)
         return(currentCountEdu)
     }
 

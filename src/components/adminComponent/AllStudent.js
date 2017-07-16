@@ -48,7 +48,6 @@ export default class AllStudent extends React.Component{
                 studentKey,
                 studentData
             })
-            console.log(this.state)
         })
     }
     render(){

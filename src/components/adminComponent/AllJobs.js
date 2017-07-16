@@ -7,29 +7,17 @@ export default class AdminAllJobs extends React.Component{
     constructor(props){
         super(props)
         this.state= {
-            snapObj :{},
             Jobs : [],
             JobsObj:{},
             JobsKeys : [],
-            pureKeys: [],
-            pureVals: [],
             loading:true
         }
-        this.onDelete = this.onDelete.bind(this)
+        this.updateState = this.updateState.bind();
+        this.onDelete = this.onDelete.bind(this);
     }
     onDelete(ind){
-        // let obj = {...this.state.csvObj};
         var keyForFind = this.state.JobsKeys[ind];
-        var findedObjKey; 
-        var obj = this.state.snapObj;
-        for(let a in obj){
-            let childObj = obj[a];
-            if(keyForFind in childObj){
-                findedObjKey = a;
-            }
-        }
-        console.log({keyForFind,findedObjKey})
-        firebase.database().ref('Jobs').child(findedObjKey).child(keyForFind).remove(function (error) {
+        firebase.database().ref('Jobs').child(keyForFind).remove(function (error) {
             if (!error) {
                 console.log("remove from firebase")
             }
@@ -37,46 +25,26 @@ export default class AdminAllJobs extends React.Component{
                 console.log('not removed')
             }
         });
-        (this.updateState.bind(this))()        
+        this.updateState()        
     }
     componentDidMount(){
-        (this.updateState.bind(this))()
+        this.updateState.bind()
     }
     updateState(){
         firebase.database().ref('Jobs').once('value').then((snap)=>{
             var snapObj = snap.val();
-            var unCVals = [];
-            var unCKeys = [];
-            for(let o in snapObj){
-                unCKeys.push(o)
-                unCVals.push(snapObj[0])
-            }
             var snapVals = [];
             var snapKeys = [];
-            for(let obj in snapObj){
-                let value =[];
-                let key =[];
-                for(let a in snapObj[obj]){
-                    // console.log(a)
-                    key.push(a)
-                    value.push(snapObj[obj][a])
-                }
-                snapVals = [...snapVals , ...value]
-                snapKeys = [...snapKeys , ...key]
+            for(let o in snapObj){
+                snapVals.push((snapObj[o]))
+                snapKeys.push(o)
             }
             this.setState({
                 Jobs : snapVals,
                 JobsKeys : snapKeys,
                 JobsObj: snapObj,
-                pureKeys: unCKeys,
-                pureVals: unCVals,
-                loading: false,
-                snapObj
+                loading: false
             })
-            // console.log(this.props.cvs)
-            console.log(this.state.cvs)
-
-            // alert('run')
         }).catch(err=>{console.log(err)})
 
     }
@@ -90,12 +58,12 @@ export default class AdminAllJobs extends React.Component{
                     this.state.loading? <Loading/>
                     :
                     !this.state.Jobs.length?
-                        <h1 className="text-center">No Jobs In This{JSON.stringify(this.state.Jobs)} </h1>
+                        <h1 className="text-center">No Jobs In This </h1>
                     :
                     <div>
                             {this.state.Jobs.map((Job,key)=>(
                                 <div key={key}>
-                                    <JobsView Job={Job} onDelete={this.onDelete.bind(null, key)}/>
+                                    <JobsView Job={Job} ind={key} onDelete={this.onDelete.bind(null, key)}/>
                                 </div>
                             ))}
                     </div>

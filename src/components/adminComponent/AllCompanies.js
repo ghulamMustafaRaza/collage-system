@@ -48,7 +48,6 @@ export default class AllCompany extends React.Component{
                 companyKey,
                 companyData
             })
-            console.log(this.state)
         })
     }
     render(){

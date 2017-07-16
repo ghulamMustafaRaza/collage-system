@@ -9,12 +9,16 @@ export default class JobMaker extends React.Component{
         let salary = this.refs.salary.value;
         let jobTitle = this.refs.jobTitle.value;
         let requirements = this.refs.requirements.value;
-        firebase.database().ref("Jobs/"+currentUser.uid).push({
+        firebase.database().ref("Jobs").push({
             salary,
             companyName,
+            companyUid: currentUser.uid,
             jobTitle,
             requirements
         })
+        // .then((snap)=>{
+        //     firebase.database().ref("Jobs/"+snap.key+"/key").set(snap.key)
+        // })
         this.props.history.push('/user')
     }
     render(){

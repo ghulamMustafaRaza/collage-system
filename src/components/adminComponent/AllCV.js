@@ -16,7 +16,6 @@ export default class AdminAllCV extends React.Component{
     }
     onDelete(ind){
         let cvsKeys = [...this.state.cvsKeys]
-        console.log(cvsKeys[ind])
         firebase.database().ref('CV').child(cvsKeys[ind]).remove(function (error) {
             if (!error) {
                 console.log("remove from firebase")
@@ -45,10 +44,6 @@ export default class AdminAllCV extends React.Component{
                 csvObj: obj,
                 loading: false
             })
-            // console.log(this.props.cvs)
-            console.log(this.state.cvs)
-
-            // alert('run')
         }).catch(err=>{console.log(err)})
     }
     render(){
