@@ -6,6 +6,7 @@ import CVMaker from "./CVMaker"
 import JobMaker from "./JobMaker"
 import StudentAllJobs from "./StudentAllJobs"
 import CompanyAllCV from "./CompanyAllCV"
+import CompanyOldJobs from "./CompanyOldJobs"
 import {AdminAllCV,AdminAllJobs,AdminAllCompanies,AdminAllStudents} from './Admin'
 import {
   BrowserRouter as Router,
@@ -92,12 +93,12 @@ export default class UserPanel extends C{
                             :
                                 <div>
                                     <Link className="btn" to="/user/company/postAJob">Post A Job</Link>
-                                    {/*<Link className="btn" to="/user/student/ourJobs">Ouer Old Jobs</Link>*/}
-                                    <Link className="btn" to="/user/student/allCV">All CV's</Link>
+                                    <Link className="btn" to="/user/company/ourJobs">Ouer Old Jobs</Link>
+                                    <Link className="btn" to="/user/company/allCV">All CV's</Link>
                                 </div>
                             }
                         </div>
-                        <div className="">
+                        <div style={{margin: 80}}>
                             {this.state.dataBase.type === "admin"?
                                 <div>
                                 <Route path="/user/admin/allcv" component={AdminAllCV}/>
@@ -113,7 +114,7 @@ export default class UserPanel extends C{
                             :
                                 <div>
                                 <Route path="/user/company/postAJob" component={JobMaker} />
-                                {/*<Route path="/user/company/ourJobs" component={()=><Loading text="our jobs"/>}/>*/}
+                                <Route path="/user/company/ourJobs" component={CompanyOldJobs}/>
                                 <Route path="/user/company/allCV" component={CompanyAllCV}/>
                                 </div>
                             }

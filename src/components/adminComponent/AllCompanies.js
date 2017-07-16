@@ -57,11 +57,14 @@ export default class AllCompany extends React.Component{
             <div>
                 {this.state.loading?<Loading/>
                 :
-                    companyData.map((company,key)=>(
-                        <div key={key}>
-                            <CompanyView company={company} onDelete={this.onDelete.bind(null,key)}/>
-                        </div>
-                    ))
+                    <div>
+                        <div className="page-header">All Companyies</div>
+{                        companyData.map((company,key)=>(
+                            <div key={key}>
+                                <CompanyView company={company} onDelete={this.onDelete.bind(null,key)}/>
+                            </div>
+                        ))}
+                    </div>
                 }
             </div>
         )

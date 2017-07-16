@@ -1,7 +1,7 @@
 import React from 'react'
 import Loading from './Loading'
 import * as firebase from "firebase"
-import {BrowserRouter as Router} from "react-router-dom"
+import {BrowserRouter as Router, Link} from "react-router-dom"
 // firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
 //   // Handle Errors here.
 //   var errorCode = error.code;
@@ -42,8 +42,8 @@ class Signin extends React.Component{
       // Handle Errors here.
       var errorCode = error.code;
       var errorMessage = error.message;
-      console.log(errorMessage)
-      console.log(errorCode)
+      alert(errorMessage)
+      // console.log(errorCode)
       // ...
     });
   }
@@ -72,6 +72,7 @@ class Signin extends React.Component{
                   <button type="submit" onClick={this.handleSubmit.bind(this)} className="btn btn-default">Login</button>
               </div>
             </div>
+            <Link className="pull-left" to="/signup">Create A Account</Link>
           </form>
           :
           <div>

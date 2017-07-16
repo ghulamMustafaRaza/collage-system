@@ -14,7 +14,9 @@ export default class CompanyAllCV extends React.Component{
         }
     }
     componentDidMount(){
+        // alert()
         firebase.database().ref('CV').once('value').then((snap)=>{
+            // alert()
             var obj = snap.val();
             var value = [];
             var key = [];
@@ -28,11 +30,13 @@ export default class CompanyAllCV extends React.Component{
                 csvObj: obj,
                 loading: false
             })
+            // alert(this.state)
             // console.log(this.props.cvs)
             console.log(this.state.cvs)
 
             // alert('run')
-        }).catch(err=>{console.log(err)})
+        })
+        .catch(err=>{console.log(err)})
     }
     render(){
         return(
@@ -49,7 +53,7 @@ export default class CompanyAllCV extends React.Component{
                     <div>
                         {this.state.cvs.map((cv,key)=>(
                             <div key={key}>
-                                <CVView cv={cv} onDelete={this.onDelete.bind(this, key)}/>
+                                <CVView cv={cv}/>
                             </div>
                         ))}
                     </div>

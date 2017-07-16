@@ -12,7 +12,8 @@ export default class CvBuilder extends Component {
 
         this.state = {
             currentCountExp:0,
-            currentCountEdu:0
+            currentCountEdu:0,
+            // currentUserCV:firebase.database().ref('CV/',firebase.auth()
         }
         this.addExp = this.addExp.bind(this);
         this.addEdu = this.addEdu.bind(this);

@@ -15,6 +15,7 @@ export default class JobMaker extends React.Component{
             jobTitle,
             requirements
         })
+        this.props.history.push('/user')
     }
     render(){
         return(
@@ -32,7 +33,7 @@ export default class JobMaker extends React.Component{
                         <label htmlFor="jobTitle">Requirements</label>
                         <textarea type="text" ref="requirements" id="requirements" rows="10" placeholder="Requirements" className="form-control"></textarea>
                     </div>
-                    <input type="submit" value="Add Job" className="btn btn-primary"/>
+                    <input type="submit" value="Add Job" className="btn btn-primary"  />
                 </form>
             </div>
         )

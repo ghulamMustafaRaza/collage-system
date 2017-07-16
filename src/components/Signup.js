@@ -1,6 +1,7 @@
 import React from 'react'
 import * as firebase from "firebase"
 import Loading from "./Loading"
+import {Link} from "react-router-dom"
 // firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
 //   // Handle Errors here.
 //   var errorCode = error.code;
@@ -43,7 +44,7 @@ class Signup extends React.Component{
       // Handle Errors here.
       var errorCode = error.code;
       var errorMessage = error.message;
-      console.log(error)
+      alert(errorMessage)
       // ...
     })
     .then((data)=>{
@@ -82,7 +83,7 @@ class Signup extends React.Component{
             <div className="form-group">
               <label className="" htmlFor="email">Name:</label>
               <div className="">
-                <input type="text" className="form-control" id="name" onChange={this.handleInput} placeholder="Enter email" name="email"/>
+                <input type="text" className="form-control" id="name" onChange={this.handleInput} placeholder="Enter Name" name="email"/>
               </div>
             </div>
             <div className="form-group">
@@ -110,6 +111,7 @@ class Signup extends React.Component{
                 <button type="submit" onClick={this.handleSubmit.bind(this)} className="btn btn-default">Submit</button>
               </div>
             </div>
+            <Link className="pull-left" to="/signin">Already A Account</Link>
           </form>
           :
           <div>
