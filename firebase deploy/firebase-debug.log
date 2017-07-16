@@ -1,0 +1,12 @@
+[debug] [2017-07-16T17:34:13.235Z] ----------------------------------------------------------------------
+[debug] [2017-07-16T17:34:13.243Z] Command:      C:\Program Files\nodejs\node.exe C:\Users\lallo\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase deploy
+[debug] [2017-07-16T17:34:13.247Z] CLI Version:  3.9.1
+[debug] [2017-07-16T17:34:13.247Z] Platform:     win32
+[debug] [2017-07-16T17:34:13.247Z] Node Version: v6.11.0
+[debug] [2017-07-16T17:34:13.271Z] Time:         Sun Jul 16 2017 10:34:13 GMT-0700 (Pacific Daylight Time)
+[debug] [2017-07-16T17:34:13.271Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2017-07-16T17:34:13.425Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2017-07-16T17:34:13.428Z] > authorizing via signed-in user
+[debug] [2017-07-16T17:34:13.439Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/campus-recruitment-syste-a2588  
+ Sun Jul 16 2017 10:34:13 GMT-0700 (Pacific Daylight Time)
